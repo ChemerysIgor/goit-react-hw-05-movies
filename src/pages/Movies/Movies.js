@@ -1,7 +1,6 @@
-import { Outlet } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { getFilmByQuery, getTrendFilms } from 'components/api';
-import { Link } from 'react-router-dom';
+import { getFilmByQuery } from 'components/api';
+
 import { useLocation } from 'react-router-dom';
 import { useSearchParams } from 'react-router-dom';
 import {
