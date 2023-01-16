@@ -1,7 +1,7 @@
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { NavLink, Outlet, useLocation, useParams } from 'react-router-dom';
 import { useEffect, useState, Suspense } from 'react';
-import { getFilmById } from 'components/api';
+import { getFilmById } from '../../components/api';
 import defaultImage from 'image/default-img.png';
 import styled from 'styled-components';
 import { Box } from 'components/Box';
@@ -14,16 +14,21 @@ const MovieDetails = () => {
 
   const backLinkHref = navPath ?? '/';
 
+  console.log(movieId);
   useEffect(() => {
     try {
       getFilmById(movieId).then(response => {
+        console.log(response);
         setMovie(response.data);
       });
     } catch (error) {
+      console.log(error.message);
       Notify.failure('OOOPS');
     }
   }, [movieId]);
+
   console.log(movie);
+
   if (movie) {
     const poster = movie.poster_path
       ? `https://image.tmdb.org/t/p/w300${movie.poster_path}`
@@ -31,7 +36,7 @@ const MovieDetails = () => {
     const score = movie.vote_average.toFixed(1);
     console.dir(movie);
     return (
-      <div p="15px" display="grid" gridGap="10px">
+      <Box p="15px" display="grid" gridGap="10px">
         <StyledBackLink to={backLinkHref}>Go back</StyledBackLink>
 
         <Box
@@ -42,19 +47,19 @@ const MovieDetails = () => {
         >
           <img src={poster} alt="" />
 
-          <div>
+          <Box>
             <h2>{movie.title}</h2>
             <p>User score {score * 10}%</p>
             <h3>Overview</h3>
             <p>{movie.overview}</p>
             <h3>Genres</h3>
 
-            <div as={'ul'} display="flex" gridGap="10px">
+            <Box as={'ul'} display="flex" gridGap="10px">
               {movie.genres.map(genre => {
                 return <li key={genre.id}>{genre.name}</li>;
               })}
-            </div>
-          </div>
+            </Box>
+          </Box>
         </Box>
 
         <Box borderBottom="1px solid black">
@@ -75,14 +80,14 @@ const MovieDetails = () => {
         <Suspense>
           <Outlet />
         </Suspense>
-      </div>
+      </Box>
     );
   }
 };
 export default MovieDetails;
 
 const StyledBackLink = styled(NavLink)`
-  margin-top: 20px;
+  margin-top: 40px;
   padding: 5px;
   width: 100px;
   border-radius: 10px;

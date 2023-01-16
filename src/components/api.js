@@ -29,7 +29,7 @@ export const getFilmCast = async id => {
 };
 export const getFilmRewiev = async id => {
   const response = await axios.get(
-    `${BASE_URL}/movie/${id}/rewiev?api_key=${API_KEY}&language=en-US`
+    `${BASE_URL}/movie/${id}/reviews?api_key=${API_KEY}&language=en-US`
   );
   return response;
 };
