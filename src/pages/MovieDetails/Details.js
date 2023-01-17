@@ -1,7 +1,7 @@
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { NavLink, Outlet, useLocation, useParams } from 'react-router-dom';
 import { useEffect, useState, Suspense } from 'react';
-import { getFilmById } from '../../components/api';
+import { getFilmById, getTvById } from '../../components/api';
 import defaultImage from 'image/default-img.png';
 import styled from 'styled-components';
 import { Box } from 'components/Box';
@@ -14,76 +14,74 @@ const MovieDetails = () => {
 
   const backLinkHref = navPath ?? '/';
 
-  console.log(movieId);
   useEffect(() => {
     try {
       getFilmById(movieId).then(response => {
-        console.log(response);
+        console.log(response.status);
         setMovie(response.data);
       });
     } catch (error) {
-      console.log(error.message);
       Notify.failure('OOOPS');
     }
   }, [movieId]);
 
-  console.log(movie);
-
-  if (movie) {
-    const poster = movie.poster_path
-      ? `https://image.tmdb.org/t/p/w300${movie.poster_path}`
-      : defaultImage;
-    const score = movie.vote_average.toFixed(1);
-    console.dir(movie);
-    return (
-      <Box p="15px" display="grid" gridGap="10px">
-        <StyledBackLink to={backLinkHref}>Go back</StyledBackLink>
-
-        <Box
-          display="grid"
-          gridTemplateColumns="250px 1fr"
-          maxWidth="600px"
-          gridGap="10px"
-        >
-          <img src={poster} alt="" />
-
-          <Box>
-            <h2>{movie.title}</h2>
-            <p>User score {score * 10}%</p>
-            <h3>Overview</h3>
-            <p>{movie.overview}</p>
-            <h3>Genres</h3>
-
-            <Box as={'ul'} display="flex" gridGap="10px">
-              {movie.genres.map(genre => {
-                return <li key={genre.id}>{genre.name}</li>;
-              })}
-            </Box>
-          </Box>
-        </Box>
-
-        <Box borderBottom="1px solid black">
-          <p>Additional information</p>
-          <Box
-            as={'ul'}
-            display="grid"
-            gridTemplateColumns="100px 100px"
-            gridGap="10px"
-            pl="5px"
-            mt="5px"
-            mb="10px"
-          >
-            <StyledBackLink to="cast">Cast</StyledBackLink>
-            <StyledBackLink to="reviews">Reviews</StyledBackLink>
-          </Box>
-        </Box>
-        <Suspense>
-          <Outlet />
-        </Suspense>
-      </Box>
-    );
+  if (movie === null) {
+    return;
   }
+  const poster = movie.poster_path
+    ? `https://image.tmdb.org/t/p/w300${movie.poster_path}`
+    : defaultImage;
+  const score = movie.vote_average.toFixed(1);
+  console.dir(movie);
+  return (
+    <Box p="15px" display="grid" gridGap="10px">
+      <StyledBackLink to={backLinkHref}>Go back</StyledBackLink>
+
+      <Box
+        display="grid"
+        gridTemplateColumns="250px 1fr"
+        maxWidth="600px"
+        gridGap="10px"
+      >
+        <img src={poster} alt="" />
+
+        <Box>
+          <h2>{movie.title}</h2>
+          <p>User score {score * 10}%</p>
+          <h3>Overview</h3>
+          <p>{movie.overview}</p>
+          <h3>Genres</h3>
+
+          <Box as={'ul'} display="flex" gridGap="10px">
+            {movie.genres.map(genre => {
+              return <li key={genre.id}>{genre.name}</li>;
+            })}
+          </Box>
+        </Box>
+      </Box>
+
+      <Box borderBottom="1px solid black">
+        <p>Additional information</p>
+        <Box
+          as={'ul'}
+          display="grid"
+          gridTemplateColumns="100px 100px"
+          gridGap="10px"
+          pl="5px"
+          mt="5px"
+          mb="10px"
+        >
+          <StyledBackLink to="cast">Cast</StyledBackLink>
+          <StyledBackLink to="reviews">Reviews</StyledBackLink>
+        </Box>
+      </Box>
+      <Suspense>
+        <Outlet />
+      </Suspense>
+    </Box>
+  );
 };
+
 export default MovieDetails;
 
 const StyledBackLink = styled(NavLink)`

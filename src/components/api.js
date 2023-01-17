@@ -21,6 +21,12 @@ export const getFilmById = async movieId => {
   return response;
 };
 
+export const getTvById = async movieId => {
+  const response = await axios.get(
+    `${BASE_URL}/tv/${movieId}?api_key=${API_KEY}`
+  );
+  return response;
+};
 export const getFilmCast = async id => {
   const response = await axios.get(
     `${BASE_URL}/movie/${id}/credits?api_key=${API_KEY}&language=en-US`

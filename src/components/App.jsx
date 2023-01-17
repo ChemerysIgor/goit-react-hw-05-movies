@@ -8,6 +8,7 @@ import Homepage from "pages/Homepage";
 // import Rewiev from "./Review/review";
 import { GlobalStyles } from "./GlobalStyles";
 import { lazy, Suspense } from "react";
+// import { useState } from "react";
 
 
 const Movies = lazy(() => import('../pages/Movies/Movies'));
@@ -17,7 +18,9 @@ const Reviews = lazy(() => import('./Review/review'))
 
 
 export const App = () => {
-
+  // const [type, setType]= useState("")
+  // const getType = (film) => { setType(film.media_type) }
+  // console.log(type)
   return (
     <>
       <StyledHeader>
@@ -29,9 +32,9 @@ export const App = () => {
       </StyledHeader>
       <Suspense fallback={<div>Loading...</div>}>
       <Routes>
-         <Route path="/goit-react-hw-05-movies/" element={<Homepage />} />
+          <Route path="/goit-react-hw-05-movies/" element={<Homepage  />} />
         <Route path="movies" element={<Movies />} />
-           <Route path="movies/:movieId" element={<Details/>} >
+          <Route path="movies/:movieId" element={<Details />} >
           <Route path="cast" element={<Cast/>} />
       <Route path="reviews" element={<Reviews/>}/>
         </Route>

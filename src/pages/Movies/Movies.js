@@ -10,25 +10,42 @@ import {
   StyledList,
   StyledLink,
 } from './MoviesStyled';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 export default function Movies() {
   // const [formValue, setFormValue] = useState('');
   const [movies, setMovie] = useState([]);
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
+
   const changeValue = evt => {
     evt.preventDefault();
-    setSearchParams({ filter: evt.currentTarget[0].value });
+    if (!evt.currentTarget[0].value) {
+      Notify.info('enter request');
+    } else {
+      setSearchParams({ filter: evt.currentTarget[0].value });
+    }
   };
-  const filter = searchParams.get('filter');
+  const filter = searchParams.get('filter') ?? '';
   console.log(filter);
 
   useEffect(() => {
     if (!filter) {
       return;
     }
-
-    getFilmByQuery(filter).then(resp => setMovie(resp.data.results));
+    try {
+      getFilmByQuery(filter).then(response => {
+        if (response.data.results.length === 0) {
+          Notify.failure(
+            `We don't have any results rof this keyword, please try another`
+          );
+          return;
+        }
+        setMovie(response.data.results);
+      });
+    } catch (error) {
+      Notify.failure('Opps... Something wrong(((');
+    }
   }, [filter]);
   console.log(movies);
 
@@ -40,10 +57,14 @@ export default function Movies() {
       </StyledForm>
       <StyledList>
         {movies.map(movie => {
-          console.log(movie.id);
+          console.log(movie.media_type);
           return (
             <li key={movie.id}>
-              <StyledLink to={`${movie.id}`} state={{ from: location }}>
+              <StyledLink
+                to={`${movie.id}`}
+                state={{ from: location }}
+                type={movies}
+              >
                 {' '}
                 {movie.title ?? movie.name}
               </StyledLink>
