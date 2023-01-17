@@ -17,7 +17,6 @@ const MovieDetails = () => {
   useEffect(() => {
     try {
       getFilmById(movieId).then(response => {
-        console.log(response.status);
         setMovie(response.data);
       });
     } catch (error) {
