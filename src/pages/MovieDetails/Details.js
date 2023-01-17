@@ -1,7 +1,7 @@
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { NavLink, Outlet, useLocation, useParams } from 'react-router-dom';
 import { useEffect, useState, Suspense } from 'react';
-import { getFilmById, getTvById } from '../../components/api';
+import { getFilmById } from '../../components/api';
 import defaultImage from 'image/default-img.png';
 import styled from 'styled-components';
 import { Box } from 'components/Box';
